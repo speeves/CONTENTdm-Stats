@@ -1,0 +1,33 @@
+CONTENTdm stats program
+
+This simple script filters and aggregates usage information from the Apache access.log. 
+
+RUN STEPS:
+------
+
+0a. open hits.sh and modify the following variables:
+  orgname='myorg'
+  orgsubnet='192.168'
+  accesslog='/var/log/httpd/access_log'
+  contentdbs='/path/to/contentdm/contentdbs/'
+0b. chmod hits.sh appropriately: (ie chmod 755 hits.sh)
+1. lists the collections in the CONTENTdm collection folder
+2. filters the access.log for each collection in the following groupings:
+  search engine robot
+  real person
+  people from my organization
+  people from outside of my organization
+  total hits
+3. prints the data to STDOUT in pipe-delimited format
+
+Step 3 can be piped to mail, or to any custom reporting program on the command line. 
+
+TO AUTOMATE:
+------------
+
+Add the following to your crontab, (make sure that your user can do an ls on the collections directory, and also read the Apache access.log):
+
+1 1 * * * /path/to/hits.sh | mail -s "$(date) Contentdm collection hits" myemail@example.com, theiremail@example.com 
+
+This will run the program every day at 1:01am.
+ 
